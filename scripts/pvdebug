@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -euo pipefail
+
+PVC=${1:-}
+POD=pvdebug-$PVC
+
+if [[ -n "$(kubectl get po | grep pvdebug_$POD)" ]]; then
+  echo "$POD is still running..."
+fi
+
+cat << EOF | kubectl apply -f -
+kind: Pod
+apiVersion: v1
+metadata:
+  name: $POD
+spec:
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+       claimName: $PVC
+  containers:
+    - name: pvdebug
+      image: pepov/alpine-tini
+      args: ["sleep", "3600"]
+      volumeMounts:
+        - mountPath: /data
+          name: data
+EOF
+
+echo -n "Waiting for the $POD pod to start.."
+until [[ -n "$(kubectl get po | grep $POD | grep Running)" ]]; do
+  echo -n "."
+  sleep 2
+done
+
+kubectl exec -ti $POD bash
+
+echo "Thank you for using pvdebug, press ENTER to delete pod $POD"
+read
+kubectl delete po $POD
