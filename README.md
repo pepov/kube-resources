@@ -16,3 +16,6 @@ Hobby Kube:
 
 Certificates:
  - https://github.com/saripurigopi/CKAD
+
+ Security:
+ - https://speakerdeck.com/ianlewis/kubernetes-security-best-practices?slide=20
