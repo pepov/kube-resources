@@ -19,3 +19,6 @@ Certificates:
 
  Security:
  - https://speakerdeck.com/ianlewis/kubernetes-security-best-practices?slide=20
+
+ Dev docs:
+ - https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
